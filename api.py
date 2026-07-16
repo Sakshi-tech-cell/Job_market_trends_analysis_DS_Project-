@@ -40,6 +40,12 @@ def show():
             "web_access": False
         }
 
+        if "RAPIDAPI_KEY" in st.secrets:
+            st.success("✅ RAPIDAPI_KEY Found")
+        else:
+            st.error("❌ RAPIDAPI_KEY Not Found")
+            st.stop()
+
         headers = {
             "x-rapidapi-key": st.secrets["RAPIDAPI_KEY"],
             "x-rapidapi-host": "chatgpt-42.p.rapidapi.com",
