@@ -59,7 +59,11 @@ def show():
                 headers=headers
             )
 
-        result = response.json()["result"]
+        #result = response.json()["result"]
+        st.write("Status Code:", response.status_code)
+        st.write("Response JSON:")
+        st.json(response.json())
+        st.stop()
 
         st.session_state.messages.append(
             {"role": "assistant", "content": result}
