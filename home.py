@@ -1,263 +1,18 @@
 import streamlit as st
 def show():
-    
-    st.markdown("""
-    <style>
 
-    /* Background */
-    .stApp{ background:linear-gradient(-45deg,#0F2027,#203A43,#2C5364,#1B5E20); 
-    background-size:400% 400%; 
-    animation:gradient 12s ease infinite;
-    }
-
-    @keyframes gradient{ 0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;} 
-    100%{background-position:0% 50%;} }            
-
-                        
-    /* Main Card */
-
-    .main-card{
-
-    background:rgba(255,255,255,0.12);
-
-    backdrop-filter:blur(15px);
-
-    padding:40px;
-
-    border-radius:25px;
-
-    box-shadow:0px 8px 30px rgba(0,0,0,0.35);
-
-    transition:0.5s;
-
-    margin-top:30px;
-
-    }
-
-    .main-card:hover{
-
-    transform:scale(1.02);
-
-    box-shadow:0px 10px 40px cyan;
-
-    }
-
-    /* Heading */
-
-    .title{
-
-    font-size:48px;
-
-    font-weight:bold;
-
-    text-align:center;
-
-    color:white;
-
-    animation:fade 2s;
-
-    }
-
-    .subtitle{
-
-    font-size:22px;
-
-    text-align:center;
-
-    color:pink;
-
-    margin-top:10px;
-
-    }
-
-    /* Button */
-
-    .button{
-
-    display:inline-block;
-
-    padding:15px 35px;
-
-    background:#6C5B7B;
-
-    color:red;
-
-    font-size:20px;
-
-    border-radius:50px;
-
-    text-decoration:none;
-
-    transition:0.4s;
-
-    margin-top:25px;
-
-    }
-
-    .button:hover{
-
-    background:#4CAF50;
-    color:red;            
-
-    transform:scale(1.1);
-
-    box-shadow:0px 0px 25px cyan;
-
-    }
-
-    /* Feature Card */
-
-    .feature{
-
-    background:rgba(255,255,255,0.15);
-
-    padding:20px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-    transition:0.5s;
-
-    height:220px;
-
-    }
-
-    .feature:hover{
-
-    transform:translateY(-10px);
-
-    background:#ffffff;
-
-    color:black;
-
-    box-shadow:0px 10px 30px cyan;
-
-    }
-
-    @keyframes fade{
-
-    from{
-
-    opacity:0;
-
-    transform:translateY(40px);
-
-    }
-
-    to{
-
-    opacity:1;
-
-    transform:translateY(0px);
-
-    }
-
-    }
-
-    img{
-
-    border-radius:20px;
-
-    }
-
-    </style>
-                
-    <style>
-
-    /* Workflow Card */
-
-    .workflow-card{
-
-    background:rgba(255,255,255,0.12);
-
-    backdrop-filter:blur(15px);
-
-    padding:30px;
-
-    border-radius:20px;
-
-    margin-top:20px;
-
-    box-shadow:0px 8px 20px rgba(0,0,0,0.3);
-
-    color:white;
-
-    transition:.4s;
-
-    }
-
-    .workflow-card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0px 0px 20px cyan;
-
-    }
-
-    /* Dashboard Card */
-
-    .page-card{
-
-    background:rgba(255,255,255,0.15);
-
-    padding:20px;
-
-    border-radius:20px;
-
-    text-align:center;
-
-    color:white;
-
-    margin:10px;
-
-    transition:.4s;
-
-    box-shadow:0px 5px 15px rgba(0,0,0,.3);
-
-    }
-
-    .page-card:hover{
-
-    background:#ffffff;
-
-    color:#000;
-
-    transform:scale(1.05);
-
-    box-shadow:0px 0px 20px cyan;
-
-    }
-
-    .page-title{
-
-    text-align:center;
-
-    color:white;
-
-    font-size:34px;
-
-    font-weight:bold;
-
-    margin-top:30px;
-
-    }
-
-    </style>            
-                
-
-
-    """,unsafe_allow_html=True)
 
     st.markdown("""
-    <div class='main-card'>
 
     <div class='title'>
 
     📊 Job Market Trends Analysis Dashboard
 
     </div>
+     """,unsafe_allow_html=True)            
+                
+    st.markdown("""
+    <div class='main-card'>            
 
     <div class='subtitle'>
 
@@ -466,6 +221,7 @@ def show():
     with a:
 
         st.markdown("""
+                                   
 
     <div class="page-card">
 
@@ -482,20 +238,21 @@ def show():
     <p>Top demanded skills & categories.</p>
 
     </div>
-
+                    
     <div class="page-card">
 
     <h2>💰 Salary Dashboard</h2>
 
     <p>Salary comparison & analysis.</p>
 
-    </div>
+    </div>   
 
     """,unsafe_allow_html=True)
 
     with b:
 
         st.markdown("""
+            
 
     <div class="page-card">
 
@@ -512,6 +269,14 @@ def show():
     <p>Popular AI job roles.</p>
 
     </div>
+                    
+    <div class="page-card">
+
+    <h2>🏢 Industry Dashboard</h2>
+
+    <p>Industry-wise hiring analysis.</p>
+
+    </div>
 
     """,unsafe_allow_html=True)
 
@@ -521,19 +286,27 @@ def show():
 
     <div class="page-card">
 
-    <h2>🏢 Industry Dashboard</h2>
-
-    <p>Industry-wise hiring analysis.</p>
-
-    </div>
-
-    <div class="page-card">
-
     <h2>🏠 Remote Work</h2>
 
     <p>Remote vs Hybrid vs Onsite jobs.</p>
 
     </div>
+                    
+     <div class="page-card">
+
+    <h2>🏠 Filter</h2>
+
+    <p>Complete AI Job Market Overview</p>
+
+    </div> 
+
+    <div class="page-card">
+
+    <h2>🤖 APIs Dashboard</h2>
+
+    <p> AI Job Market Assistant</p>
+
+    </div>               
 
     """,unsafe_allow_html=True)
 
@@ -556,3 +329,15 @@ def show():
         """,
         unsafe_allow_html=True
     )
+
+    st.sidebar.markdown("---")
+
+    st.sidebar.info("""
+    Developed By
+
+    **👩‍💻 Sakshi **
+
+    Python | Pandas | Plotly | Streamlit
+    """)
+
+   

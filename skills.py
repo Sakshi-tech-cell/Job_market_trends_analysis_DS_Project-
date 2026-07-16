@@ -12,102 +12,181 @@ def show():
     t1,t2,t3=st.tabs(["Demanded_skill","Skill Category Distribution","Overview"])
     with t1:
 
-        st.title("💻 Skills Dashboard")
+    #     st.title("💻 Skills Dashboard")
 
         skills = pd.read_csv("skills_demand.csv")
         country = pd.read_csv("country_ai_trends.csv")
 
-        category = st.selectbox(
-        "Select Skill Category",
-        ["All"]+list(skills["skill_category"].unique())
-        )
+     
 
-        if category!="All":
-            skills = skills[
-            skills["skill_category"]==category
-            ]
+    #     category = st.selectbox(
+    #     "Select Skill Category",
+    #     ["All"]+list(skills["skill_category"].unique())
+    #     )
 
-        top = skills["skill"].value_counts().head(15)
+    #     if category!="All":
+    #         skills = skills[
+    #         skills["skill_category"]==category
+    #         ]
 
-        st.bar_chart(top)
+    #     top = skills["skill"].value_counts().head(15)
 
-        st.dataframe(skills) 
+    #     st.bar_chart(top)
+    #     st.dataframe(skills)
+    #     st.divider()
+    #   st.title("💻 Skills Dashboard")
+        st.markdown("Analyze the most in-demand AI & Data Science skills.")
 
-    with t2: 
-        #Using Streamlit graph
-
-        st.title("👩🏽‍💼 Skill Level Distribution using Streamlit ") 
+        # Load Data
         skills = pd.read_csv("skills_demand.csv")
-        skill_counts = skills["skill_level"].value_counts()
 
-        st.bar_chart(skill_counts)
-        st.divider() 
-        
-        
-        #using matplotlib
-        st.title("👩🏽‍💻 Skill Category Distribution")
+        # ----------------------------
+        # KPIs
+        # ----------------------------
 
-        skills = pd.read_csv("skills_demand.csv")
-        skills = skills["skill_category"].value_counts()
+        c1, c2, c3 = st.columns(3)
 
-            # Create Figure with 2 plots
-        fig, ax = plt.subplots(1, 2, figsize=(12, 5))
-            # ---------------------------
-            # Bar Chart
-            # ---------------------------
-        skills.plot(
-            kind="bar",
-            ax=ax[0],
-            color=["purple", "pink", "#FEC9A7"],
-            edgecolor="black",
-            alpha=0.6
-        )
+        c1.metric("Total Skills", skills["skill"].nunique())
+        c2.metric("Skill Categories", skills["skill_category"].nunique())
+        c3.metric("Total Records", len(skills))
 
-        ax[0].set_title("Skill Category Distribution")
-        ax[0].set_xlabel("Skill Category")
-        ax[0].set_ylabel("Number of Skills")
-        ax[0].tick_params(axis="x", rotation=45)
+        st.divider()
 
-        # Show values on bars
-        for i, value in enumerate(skills):
-            ax[0].text(
-                i,
-                value,
-                str(value),
-                ha="center",
-                va="bottom"
+        # ----------------------------
+        # Filters
+        # ----------------------------
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            category = st.selectbox(
+                "📂 Select Skill Category",
+                ["All"] + sorted(skills["skill_category"].unique())
             )
 
-            # ---------------------------
-            # Pie Chart
-            # ---------------------------
-        explode = [0.1, 0, 0]
+        with col2:
+            search = st.text_input(
+                "🔍 Search Skill",
+                placeholder="Enter skill name..."
+            )
 
-        skills.plot(
-            kind="pie",
-            ax=ax[1],
-            autopct="%1.1f%%",
-            startangle=90,
-            shadow=True,
-            explode=explode,
-            wedgeprops={
-                "edgecolor": "black",
-                "linewidth": 1,
-                "linestyle": "-."
-            }
+        # Apply Filters
+
+        filtered = skills.copy()
+
+        if category != "All":
+            filtered = filtered[
+                filtered["skill_category"] == category
+            ]
+
+        if search:
+            filtered = filtered[
+                filtered["skill"].str.contains(search, case=False)
+            ]
+
+        st.divider()
+
+        # ----------------------------
+        # Top Skills Chart
+        # ----------------------------
+
+        top = (
+            filtered["skill"]
+            .value_counts()
+            .head(15)
+            .reset_index()
         )
 
-        ax[1].set_title("Skill Category Distribution")
-        ax[1].set_ylabel("")
+        top.columns = ["Skill", "Count"]
 
-        plt.tight_layout()
-        # Display in Streamlit
-        st.pyplot(fig)
-        st.divider() 
+        fig = px.bar(
+            top,
+            x="Skill",
+            y="Count",
+            color="Count",
+            text="Count",
+            color_continuous_scale="Cividis",
+            title="Top Most In-Demand Skills"
+        )
 
+        fig.update_layout(
+            plot_bgcolor="rgba(0,0,0,0)",     # Chart area
+            paper_bgcolor="rgba(0,0,0,0)",    # Outside chart area
+            title_x=0.3,
+            xaxis_title="Skill",
+            yaxis_title="Frequency",
+            height=500
+        )
 
-        ###Using Plotly
-        st.title("👩🏽‍💼 Skill Level Distribution using Streamlit ")
+        fig.update_traces(textposition="outside")
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ----------------------------
+        # Data Table
+        # ----------------------------
+
+        st.subheader("📄 Skills Dataset")
+
+        st.dataframe(
+            filtered,
+            use_container_width=True,
+            hide_index=True
+        )
+        st.divider()
+
+    # ---------------------------- 
+
+        #st.bar_chart(skills,x="skill",y="skill_category",color="skill_level")
+        #st.scatter_chart(country,x="total_ai_jobs",y="year",color="top_skill",size="country")
+
+        fig = px.scatter(
+            country,
+            x="total_ai_jobs",
+            y="year",
+            color="top_skill",
+            size="remote_percentage",   # Numeric column
+            hover_name="country",
+            text="country",
+            color_continuous_scale="Turbo"
+        )
+
+        fig.update_traces(
+            marker=dict(
+                line=dict(color="white", width=1)
+            ),
+            textposition="top center"
+        )
+
+        fig.update_layout(
+
+        title=dict(
+            text="🌍 AI Jobs vs Year by Country",
+            x=0.26,
+            font=dict(
+                size=28,
+                color="white",
+                family="Arial Black"
+            )
+        ),
+
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+
+        font=dict(
+            color="white",
+            size=14
+        ),
+
+        height=600
+    )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+    with t2: 
+
+          ###Using Plotly
+        st.title("👩🏽‍💼 Skill Level Distribution using Plotly ")
         skills = pd.read_csv("skills_demand.csv")
 
         col1, col2 = st.columns(2)
@@ -135,7 +214,7 @@ def show():
                 color="Count",
                 text="Count",
                 custom_data=["Skills"],  # Shows skills on hover
-                color_continuous_scale="Turbo"
+                color_continuous_scale="Mint"
             )
 
             fig.update_traces(
@@ -197,7 +276,8 @@ def show():
                 names="skill_category",
                 values="Count",
                 hole=0.45,
-                custom_data=["Skills"]
+                #custom_data=["Skills"]
+                color_discrete_sequence=px.colors.qualitative.Antique
             )
 
             fig.update_traces(
@@ -232,41 +312,13 @@ def show():
             )
 
             st.plotly_chart(fig, use_container_width=True)
+        st.divider()         
 
 
+      
+    with t3:
 
-    with t3: 
-        # Count number of skills required for each job
-        st.title("Distribution of Skills Required per Job")
-        skills = pd.read_csv("skills_demand.csv")
-        
-        skills_per_job = skills.groupby("job_id")["skill"].count().head(8)
-        st.bar_chart(skills_per_job)
-
-            #Create figure
-        skills = pd.read_csv("skills_demand.csv")
-        
-        skills_per_job = skills.groupby("job_id")["skill"].count() 
-        # Create figure
-        plt.figure(figsize=(8,5))
-
-        plt.hist(
-        skills_per_job,
-        bins=10,
-        edgecolor="black",
-        color="#8F9CC4"
-        )
-
-        plt.title("Distribution of Skills Required per Job")
-        plt.xlabel("Number of Skills Required")
-        plt.ylabel("Number of Jobs")
-        plt.grid(axis="y", alpha=0.5)
-        # Display in Streamlit
-        st.pyplot(plt) 
-
-        st.divider()   
-
-        # Count top skills
+          # Count top skills
         st.title("👩🏽‍💻 Most Demanded AI Skills")
         top_skill = (
             country["top_skill"]
@@ -289,7 +341,7 @@ def show():
                 y="Count",
                 color="Count",
                 text="Count",
-                color_continuous_scale="Turbo"
+                color_continuous_scale="Ice"
             )
 
             fig.update_traces(
@@ -368,6 +420,19 @@ def show():
             )
 
             st.plotly_chart(fig, use_container_width=True)
+        st.divider()
 
+        st.sidebar.markdown("---")
+
+        st.sidebar.info("""
+        Developed By
+
+        **👩‍💻 Sakshi**
+
+        Python | Pandas | Plotly | Streamlit
+        """)
+    
+
+      
 
 

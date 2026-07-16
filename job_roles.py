@@ -9,15 +9,26 @@ def show():
     # Load Datasets
     jobs = pd.read_csv("ai_jobs.csv")
     roles = pd.read_csv("job_title_mapping.csv")
+    country = pd.read_csv("country_ai_trends.csv")
 
     st.title("👩🏽‍💼 Job Roles Dashboard")
-    st.markdown("Analyze AI job roles, standardized titles, and role categories.")
+    st.markdown("Analyze AI job roles and role categories.")
 
-    tab1, tab2, tab3, tab4 = st.tabs([
+    st.sidebar.markdown("---")
+
+    st.sidebar.info("""
+    Developed By
+
+    **👩‍💻 Sakshi **
+
+    Python | Pandas | Plotly | Streamlit
+    """)
+
+    tab1, tab2 = st.tabs([
         "📌 Most Common Job Titles",
-        "📝 Standardized Job Titles",
+      #  "📝 Standardized Job Titles",
         "📂 Role Categories",
-        "📑 Heat Map "
+       # "📑 Heat Map "
     ])
 
     # =====================================================
@@ -25,32 +36,116 @@ def show():
     # =====================================================
     with tab1:
 
-        st.subheader("📌 Top 10 Most Common Job Titles")
+        # st.subheader("📌 Top 10 Most Common Job Titles")
 
-        top_jobs = jobs["job_title"].value_counts().head(10)
+        # top_jobs = jobs["job_title"].value_counts().head(10)
+
+        # fig = px.bar(
+        #     top_jobs.reset_index(),
+        #     x="job_title",
+        #     y="count",
+        #     color="count",
+        #     text="count",
+        #     color_continuous_scale="Viridis"
+        # )
+
+        # fig.update_layout(
+        #     title={
+        #         "text":"Top 10 Most Common Job Titles",
+        #         "x":0.5
+        #     },
+        #     xaxis_title="Job Title",
+        #     yaxis_title="Number of Jobs",
+        #     height=500
+        # )
+
+        # st.plotly_chart(fig, use_container_width=True)
+
+        #st.subheader("📌 Top 10 Most Common Job Titles")
+        top_jobs = (
+            jobs["job_title"]
+            .value_counts()
+            .head(10)
+            .reset_index(name="Jobs")
+        )
+
+        top_jobs.columns = ["Job Title", "Jobs"]
 
         fig = px.bar(
-            top_jobs.reset_index(),
-            x="job_title",
-            y="count",
-            color="count",
-            text="count",
-            color_continuous_scale="Viridis"
+            top_jobs,
+            x="Job Title",
+            y="Jobs",
+            color="Jobs",
+            text="Jobs",
+            color_continuous_scale="Spectral"
+        )
+
+        fig.update_traces(
+            textposition="outside",
+            marker_line_color="white",
+            marker_line_width=1.5,
+            hovertemplate=
+            "<b>%{x}</b><br>"
+            "Total Jobs: <b>%{y}</b>"
+            "<extra></extra>"
         )
 
         fig.update_layout(
-            title={
-                "text":"Top 10 Most Common Job Titles",
-                "x":0.5
-            },
-            xaxis_title="Job Title",
-            yaxis_title="Number of Jobs",
-            height=500
+
+            title=dict(
+                text="📌 Top Most Common Job Titles",
+                x=0.3,
+                font=dict(
+                    size=28,
+                    color="white",
+                    family="Arial Black"
+                )
+            ),
+
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+
+            font=dict(
+                color="white",
+                size=14
+            ),
+
+            xaxis=dict(
+                title="Job Title",
+                tickangle=-20,
+                showgrid=False,
+                showline=True,
+                linecolor="white"
+            ),
+
+            yaxis=dict(
+                title="Number of Jobs",
+                showgrid=True,
+                gridcolor="rgba(255,255,255,0.15)",
+                showline=True,
+                linecolor="white"
+            ),
+
+            coloraxis_colorbar=dict(
+                title="Jobs"
+            ),
+
+            height=600,
+
+            margin=dict(
+                t=80,
+                l=40,
+                r=20,
+                b=40
+            )
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
+
+
         st.dataframe(top_jobs)
+        st.divider()
 
         #Pie Chart
 
@@ -97,7 +192,7 @@ def show():
                 text="📊 Job Title Distribution",
                 x=0.5,
                 xanchor="center",
-                font=dict(size=24, color="white")
+                font=dict(size=30, color="white")
             ),
 
             # Remove background
@@ -125,82 +220,12 @@ def show():
         )
 
         st.plotly_chart(fig, use_container_width=True)
-        
+
 
     # =====================================================
     # TAB 2
     # =====================================================
     with tab2:
-        
-        st.metric(
-            "Standardized Titles",
-            roles["standardized_title"].nunique()
-        )
-
-        # Count standardized job titles
-        standard = roles["standardized_title"].value_counts().reset_index()
-        standard.columns = ["Standardized Title", "Count"]
-
-        fig = px.bar(
-            standard,
-            x="Standardized Title",
-            y="Count",
-            color="Count",
-            text="Count",
-            color_continuous_scale="Viridis"   # You can also use Plasma, Turbo, Sunset
-        )
-
-        fig.update_traces(
-            textposition="outside",
-            marker_line_color="white",
-            marker_line_width=1.5,
-            hovertemplate="<b>%{x}</b><br>Total Jobs: %{y}<extra></extra>"
-        )
-
-        fig.update_layout(
-
-            title={
-                "text": "📋 Standardized Job Titles",
-                "x": 0.38,
-                "font": dict(size=24, color="white")
-            },
-
-            xaxis_title="Standardized Job Title",
-            yaxis_title="Number of Jobs",
-
-            paper_bgcolor="rgba(0,0,0,0)",   # Transparent background
-            plot_bgcolor="rgba(0,0,0,0)",
-
-            font=dict(
-                color="white",
-                size=14
-            ),
-
-            xaxis=dict(
-                tickangle=-20,
-                showgrid=False
-            ),
-
-            yaxis=dict(
-                showgrid=True,
-                gridcolor="rgba(255,255,255,0.15)"
-            ),
-
-            coloraxis_showscale=True,       # Show color scale
-
-            height=600
-        )
-
-        st.plotly_chart(fig, use_container_width=True)
-        st.dataframe(standard)
-
-
-
-
-    # =====================================================
-    # TAB 3
-    # =====================================================
-    with tab3:
 
         # st.subheader(" Role Categories")
 
@@ -312,7 +337,7 @@ def show():
                 y="Count",
                 color="Role Category",
                 text="Count",
-                color_discrete_sequence=px.colors.qualitative.Set2
+                color_discrete_sequence=px.colors.qualitative.Antique
             )
 
             fig.update_traces(
@@ -363,7 +388,7 @@ def show():
                 values="Count",
                 hole=0.4,
                 color="Role Category",
-                color_discrete_sequence=px.colors.qualitative.Pastel
+                color_discrete_sequence=px.colors.qualitative.Pastel1
             )
 
             fig.update_traces(
@@ -400,96 +425,6 @@ def show():
 
             st.plotly_chart(fig, use_container_width=True)
 
-
-
-    with tab4:
-
-      # heat = pd.crosstab(
-      #     roles["role_category"],
-      #     roles["standardized_title"]
-      # )
-
-      # fig,ax = plt.subplots(figsize=(10,5))
-
-      # sns.heatmap(
-      #     heat,
-      #     annot=True,
-      #     cmap="YlGnBu",
-      #     linewidths=.5,
-      #     ax=ax
-      # )
-
-      # plt.title(
-      #     "Role Category vs Standardized Job Title"
-      # )
-      # st.pyplot(fig)
-      
-
-
-      #Correlation HeatMap
-
-      # Cross Tab
-      heat = pd.crosstab(
-          roles["role_category"],
-          roles["standardized_title"]
-      )
-
-      # Create Figure
-      fig, ax = plt.subplots(figsize=(12, 6))
-
-      # Transparent Background
-      fig.patch.set_alpha(0)
-      ax.set_facecolor("none")
-
-      # Heatmap
-      sns.heatmap(
-          heat,
-          annot=True,
-          fmt="d",
-          cmap="YlGnBu",
-          linewidths=1,
-          linecolor="white",
-          cbar_kws={"label": "Number of Jobs"},
-          annot_kws={"size": 12},
-          ax=ax
-      )
-
-      # Title
-      ax.set_title(
-          "🔥 Role Category vs Standardized Job Title",
-          fontsize=18,
-          color="white",
-          weight="bold",
-          pad=20
-      )
-
-      # Axis Labels
-      ax.set_xlabel(
-          "Standardized Job Title",
-          fontsize=13,
-          color="white"
-      )
-
-      ax.set_ylabel(
-          "Role Category",
-          fontsize=13,
-          color="white"
-      )
-
-      # Tick Colors
-      ax.tick_params(axis="x", colors="white", rotation=20)
-      ax.tick_params(axis="y", colors="white", rotation=0)
-
-      # Colorbar Text Color
-      cbar = ax.collections[0].colorbar
-      cbar.ax.yaxis.label.set_color("white")
-      cbar.ax.tick_params(colors="white")
-
-      plt.tight_layout()
-
-      # Show in Streamlit
-      st.pyplot(fig)
-        
 
 
 

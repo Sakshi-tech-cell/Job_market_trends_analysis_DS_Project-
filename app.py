@@ -7,16 +7,31 @@ import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 #from pages.home import home_page
 
-from pages.sidebar import sidebar
+# from pages.sidebar import sidebar
 
-from pages import home
-from pages import Overview
-from pages import skills
-from pages import job_roles
-from pages import country
-from pages import industry
-from pages import remote
-from pages import salary
+# from pages import home
+# from pages import Overview
+# from pages import skills
+# from pages import job_roles
+# from pages import salary
+# from pages import country
+# from pages import industry
+# from pages import remote
+# from pages import filter
+# from pages import api
+
+from sidebar import sidebar
+
+import home
+import Overview
+import skills
+import job_roles
+import salary
+import country
+import industry
+import remote
+import filter
+import api
 
 # ----------------------------
 # Page Configuration
@@ -29,7 +44,7 @@ st.set_page_config(
     #initial_sidebar_state="expanded"
 )
 
-#jobs = pd.read_csv("ai_jobs.csv")
+# jobs = pd.read_csv("ai_jobs.csv")
 
 # skills = pd.read_csv("skills_demand.csv")
 
@@ -47,17 +62,63 @@ st.markdown("""
 
   /* Background */
 
-  .stApp{
-  background:linear-gradient(-45deg,#0F2027,#203A43,#2C5364,#1B5E20);
-  background-size:400% 400%;
-  animation:gradient 12s ease infinite;
-  }
+/* ==========================
+   Full Background Image
+========================== */
 
+.stApp {
+    background: 
+    /* 1. Your Custom Glowing Spots */
+    radial-gradient(circle at 15% 20%, rgba(0,255,255,.35), transparent 25%),
+    radial-gradient(circle at 85% 25%, rgba(170,0,255,.35), transparent 30%),
+    radial-gradient(circle at 50% 80%, rgba(0,255,150,.30), transparent 25%),
+    /* 2. Deep Dark Masking Blend Layer */
+    linear-gradient(rgba(5, 8, 22, 0.75), rgba(5, 8, 22, 0.85)),
+    /* 3. High-Quality Graphic Asset */
+    url("https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=1920&q=80");
+    
+    background-size: 100% 100%, 100% 100%, 100% 100%, cover, cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* ==========================
+   Glass Effect Container
+========================== */
+
+.main .block-container{
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* ==========================
+   Sidebar
+========================== */
+
+section[data-testid="stSidebar"]{
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(15px);
+}
+
+/* ==========================
+   Headings
+========================== */
+
+h1,h2,h3,h4,h5,h6{
+    color:white;
+}
+/*
   @keyframes gradient{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
   }
+*/            
 
   /* Main Card */
 
@@ -83,7 +144,7 @@ st.markdown("""
 
   transform:scale(1.02);
 
-  box-shadow:0px 10px 40px cyan;
+  box-shadow:0px 10px 40px #A8E6CE;
 
   }
 
@@ -123,7 +184,7 @@ st.markdown("""
 
   padding:15px 35px;
 
-  background:#00BCD4;
+  background:#F4D1FF;
 
   color:white;
 
@@ -141,11 +202,11 @@ st.markdown("""
 
   .button:hover{
 
-  background:#4CAF50;
+  background:#A8E6CE;
 
   transform:scale(1.1);
 
-  box-shadow:0px 0px 25px cyan;
+  box-shadow:0px 0px 25px pink;
 
   }
 
@@ -269,7 +330,7 @@ color:#000;
 
 transform:scale(1.05);
 
-box-shadow:0px 0px 20px cyan;
+box-shadow:0px 0px 20px #A8E6CE;
 
 }
 
@@ -341,11 +402,12 @@ border:1px solid rgba(255,255,255,.2);
             
 .glass-card:hover{
     transform:translateY(-8px);
-    box-shadow:0 0 25px #00E5FF;
+    box-shadow:0 0 25px #A8E6CE;
 }            
 
 </style>
 """, unsafe_allow_html=True)
+
 
 
 # ----------------------------
@@ -367,6 +429,9 @@ elif page == "Skills Dashboard":
 elif page == "Job Roles":
     job_roles.show()
 
+elif page == "Salary Analysis":
+    salary.show()    
+
 
 elif page == "Country Dashboard":
     country.show()
@@ -377,8 +442,13 @@ elif page == "Industry Dashboard":
 elif page == "Remote Work":
     remote.show()
 
-elif page == "Salary Analysis":
-    salary.show()
+elif page == "Filter":
+    filter.show() 
+
+elif page == "APIs":
+    api.show()        
+
+
 
 
 

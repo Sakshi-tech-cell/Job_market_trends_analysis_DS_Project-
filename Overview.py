@@ -16,7 +16,7 @@ def show():
 
      #st.radio button , st.markdown etc
 
-    t1,t2,t3=st.tabs(["Data","Info","Overview"])
+    t1,t2,t3=st.tabs(["🖥️ Data","📊 Info","✨ Overview"])
     with t1:
         st.title("💼 AI Jobs Dataset")
         st.write("Contains job title, salary, country, company and experience level.")
@@ -311,5 +311,16 @@ def show():
         st.bar_chart(
             jobs["company_size"].value_counts()
         )
+
+        st.sidebar.markdown("---")
+
+        st.sidebar.info("""
+        Developed By
+
+        **Sakshi Kumari**
+
+        Python | Pandas | Plotly | Streamlit
+        """)
+
 
 
